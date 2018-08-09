@@ -39,7 +39,7 @@ def getAllMyimagelinks(username):
 				if obg_imglink.get_attribute("href") not in imglinks:
 					imglinks.append(obg_imglink.get_attribute("href"))
 
-	    # Scroll down to bottom
+	    	# Scroll down to bottom
 		chrome.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
 		# Wait to load page
@@ -61,29 +61,34 @@ def getAllMylikes(imglinks):
 	print(len(imglinks))
 	for imglink in imglinks:
 			
-			newword = imglink.replace("https://www.instagram.com/p/", "")
-			newword = newword.split('/')[0]
+		newword = imglink.replace("https://www.instagram.com/p/", "")
+		newword = newword.split('/')[0]
 
-			chrome.get(imglink)
-			time.sleep(0.5)
-			try:
-				imgqueeuquero = chrome.find_element_by_xpath("//img[@srcset]")
+		chrome.get(imglink)
+		time.sleep(0.5)
+		try:
+			imgqueeuquero = chrome.find_element_by_xpath("//img[@srcset]")
 
-				isimg = True
-				obg_likes = chrome.find_element_by_xpath("//a[@href='" + "/p/" + newword + "/liked_by/" +"']")
-				
-				print(obg_likes.text)
-				
-			except Exception as e:
-				isimg = False
+			isimg = True
+			obg_likes = chrome.find_element_by_xpath("//a[@href='" + "/p/" + newword + "/liked_by/" +"']")
 
-			if isimg:
-				likevalue = obg_likes.text.split(' ')[0]
-				vector_likes.append(int(likevalue))
+			print(obg_likes.text)
+
+		except Exception as e:
+			isimg = False
+
+		if isimg:
+			likevalue = obg_likes.text.split(' ')[0]
+			vector_likes.append(int(likevalue))
 
 	return vector_likes
 	
-
+def likeImageLink(imagesitepath):
+	chrome.get(imagesitepath)
+	button_like = chrome.find_element_by_xpath("//button[@class='coreSpriteHeartOpen oF4XW dCJp8']")
+	time.sleep(0.5)
+	button_like.click()
+	
 def getAllMyfollowers(username):
 
 	# 1 - GO TO PERFIL PAGE
